@@ -1,11 +1,14 @@
-package br.com.zup.transacao.kafka.dto.response;
+package br.com.zup.transacao.kafka.evento;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import br.com.zup.transacao.dominio.modelo.Transacao;
+import br.com.zup.transacao.kafka.dto.response.CartaoResponseKafkaDto;
+import br.com.zup.transacao.kafka.dto.response.EstabelecimentoResponseKafkaDto;
+import br.com.zup.transacao.kafka.dto.response.TransacaoResponseKafkaDto;
 
-public class TransacaoResponseKafkaDto {
+public class EventoDeTransacao {
 
 	private String id;
 	private BigDecimal valor;
@@ -13,46 +16,37 @@ public class TransacaoResponseKafkaDto {
 	private CartaoResponseKafkaDto cartao;
 	private LocalDateTime efetivadaEm;
 
-	public String getId() {
-		return id;
+	public EventoDeTransacao() {
+	}
+	
+	public EventoDeTransacao(TransacaoResponseKafkaDto dto) {
+		this.id = dto.getId();
+		this.valor = dto.getValor();
+		this.estabelcimento = dto.getEstabelcimento();
+		this.cartao = dto.getCartao();
+		this.efetivadaEm = dto.getEfetivadaEm();
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public String getId() {
+		return id;
 	}
 
 	public BigDecimal getValor() {
 		return valor;
 	}
 
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
-	}
-
 	public EstabelecimentoResponseKafkaDto getEstabelcimento() {
 		return estabelcimento;
-	}
-
-	public void setEstabelcimento(EstabelecimentoResponseKafkaDto estabelcimento) {
-		this.estabelcimento = estabelcimento;
 	}
 
 	public CartaoResponseKafkaDto getCartao() {
 		return cartao;
 	}
 
-	public void setCartao(CartaoResponseKafkaDto cartao) {
-		this.cartao = cartao;
-	}
-
 	public LocalDateTime getEfetivadaEm() {
 		return efetivadaEm;
 	}
 
-	public void setEfetivadaEm(LocalDateTime efetivadaEm) {
-		this.efetivadaEm = efetivadaEm;
-	}
-	
 	public Transacao toModel() {
 		return new Transacao(id, valor, null, cartao.toModel(), efetivadaEm);
 	}

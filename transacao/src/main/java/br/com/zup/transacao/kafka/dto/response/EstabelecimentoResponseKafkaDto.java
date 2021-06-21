@@ -1,8 +1,8 @@
-package br.com.zup.transacao.dto.response;
+package br.com.zup.transacao.kafka.dto.response;
 
 import br.com.zup.transacao.dominio.modelo.Estabelecimento;
 
-public class EstabelecimentoResponseDto {
+public class EstabelecimentoResponseKafkaDto {
 
 	private String nome;
 	private String cidade;
@@ -31,13 +31,13 @@ public class EstabelecimentoResponseDto {
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
 	}
-
+	
 	public Estabelecimento toModel() {
 		return new Estabelecimento(nome, cidade, endereco);
 	}
 
 	@Override
 	public String toString() {
-		return "EstabelecimentoResponseDto [nome=" + nome + ", cidade=" + cidade + ", endereco=" + endereco + "]";
+		return "EstabelecimentoResponseKafkaDto [nome=" + nome + ", cidade=" + cidade + ", endereco=" + endereco + "]";
 	}
 }

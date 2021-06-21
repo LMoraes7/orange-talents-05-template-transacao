@@ -1,18 +1,44 @@
 package br.com.zup.transacao.dominio.modelo;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Cartao {
 
 	@Id
-	private final String id;
+	private String id;
+	
+	@Column(nullable = false)
 	private String email;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cartao")
+	private Set<Transacao> transacoes = new HashSet<Transacao>();
+	
+	public Cartao() {
+	}
 
 	public Cartao(String id, String email) {
 		this.id = id;
 		this.email = email;
+	}
+	
+	public void addTransacao(Transacao transacao) {
+		this.transacoes.add(transacao);
+	}
+	
+	public String getId() {
+		return id;
+	}
+	
+	public String getEmail() {
+		return email;
 	}
 
 	@Override
@@ -44,5 +70,4 @@ public class Cartao {
 	public String toString() {
 		return "Cartao [id=" + id + ", email=" + email + "]";
 	}
-
 }

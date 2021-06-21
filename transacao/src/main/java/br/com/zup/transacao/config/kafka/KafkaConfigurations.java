@@ -1,4 +1,4 @@
-package br.com.zup.transacao.configuracao.kafka;
+package br.com.zup.transacao.config.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,14 +13,14 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import br.com.zup.transacao.dto.response.EventoDeTransacao;
+import br.com.zup.transacao.kafka.evento.EventoDeTransacao;
 
 @Configuration
-public class KafkaConfig {
+public class KafkaConfigurations {
 
 	private final KafkaProperties kafkaProperties;
 
-	public KafkaConfig(KafkaProperties kafkaProperties) {
+	public KafkaConfigurations(KafkaProperties kafkaProperties) {
 		this.kafkaProperties = kafkaProperties;
 	}
 
@@ -34,20 +34,21 @@ public class KafkaConfig {
 		properties.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaProperties.getConsumer().getGroupId());
 		properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, kafkaProperties.getConsumer().getAutoOffsetReset());
 		return properties;
-
 	}
 
 	@Bean
 	public ConsumerFactory<String, EventoDeTransacao> transactionConsumerFactory() {
 		StringDeserializer stringDeserializer = new StringDeserializer();
-		JsonDeserializer<EventoDeTransacao> jsonDeserializer = new JsonDeserializer<>(EventoDeTransacao.class, false);
+		JsonDeserializer<EventoDeTransacao> jsonDeserializer = new JsonDeserializer<>(
+				EventoDeTransacao.class, false);
+
 		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(), stringDeserializer, jsonDeserializer);
 	}
 
 	@Bean
 	public ConcurrentKafkaListenerContainerFactory<String, EventoDeTransacao> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, EventoDeTransacao> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(transactionConsumerFactory());
-		return factory;
+	    ConcurrentKafkaListenerContainerFactory<String, EventoDeTransacao> factory = new ConcurrentKafkaListenerContainerFactory<>();
+	    factory.setConsumerFactory(transactionConsumerFactory());
+	    return factory;
 	}
 }

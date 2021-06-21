@@ -1,8 +1,8 @@
-package br.com.zup.transacao.dto.response;
+package br.com.zup.transacao.kafka.dto.response;
 
 import br.com.zup.transacao.dominio.modelo.Cartao;
 
-public class CartaoResponseDto {
+public class CartaoResponseKafkaDto {
 
 	private String id;
 	private String email;
@@ -22,13 +22,13 @@ public class CartaoResponseDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
 	public Cartao toModel() {
 		return new Cartao(id, email);
 	}
 
 	@Override
 	public String toString() {
-		return "CartaoResponseDto [id=" + id + ", email=" + email + "]";
+		return "CartaoResponseKafkaDto [id=" + id + ", email=" + email + "]";
 	}
 }

@@ -11,25 +11,30 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 
 @Entity
 public class Transacao {
 
 	@Id
-	private final String id;
+	private String id;
 
 	@Column(nullable = false)
-	private final BigDecimal valor;
+	private BigDecimal valor;
 
 	@Embedded
-	private final Estabelecimento estabelcimento;
+	private Estabelecimento estabelcimento;
 
 	@JoinColumn(nullable = false)
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
-	private final Cartao cartao;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+	private Cartao cartao;
 
 	@Column(nullable = false, columnDefinition = "datetime")
-	private final LocalDateTime efetivadaEm;
+	private LocalDateTime efetivadaEm;
+	
+	@Deprecated
+	public Transacao() {
+	}
 
 	public Transacao(String id, BigDecimal valor, Estabelecimento estabelcimento, Cartao cartao,
 			LocalDateTime efetivadaEm) {
@@ -38,6 +43,31 @@ public class Transacao {
 		this.estabelcimento = estabelcimento;
 		this.cartao = cartao;
 		this.efetivadaEm = efetivadaEm;
+	}
+	
+	@PrePersist
+	public void addTransacaoAoCartao() {
+		this.cartao.addTransacao(this);
+	}
+	
+	public String getId() {
+		return id;
+	}
+	
+	public BigDecimal getValor() {
+		return valor;
+	}
+	
+	public Estabelecimento getEstabelcimento() {
+		return estabelcimento;
+	}
+	
+	public LocalDateTime getEfetivadaEm() {
+		return efetivadaEm;
+	}
+	
+	public Cartao getCartao() {
+		return cartao;
 	}
 
 	@Override
